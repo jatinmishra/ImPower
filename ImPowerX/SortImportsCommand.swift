@@ -1,6 +1,6 @@
 //
-//  SourceEditorCommand.swift
-//  ImPowerX
+//  SortImportsCommand.swift
+//  ImPower
 //
 //  Created by Jatin Mishra.
 //
@@ -8,31 +8,17 @@
 import Foundation
 import XcodeKit
 
-class SourceEditorCommand: NSObject, XCSourceEditorCommand {
-    
+class SortImportsCommand: NSObject, XCSourceEditorCommand {
     func perform(with invocation: XCSourceEditorCommandInvocation, completionHandler: @escaping (Error?) -> Void) {
-        var buffer = invocation.buffer.lines
-        
-        guard let cursorSelection = invocation.buffer.selections.firstObject as? XCSourceTextRange else {
-            completionHandler(nil)
-            return
-        }
-        
-        let cursorLine = cursorSelection.start.line
-        
-        if let line = (buffer[cursorLine] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines), line.starts(with: "import ") {
-            moveNewImportToTop(line, at: cursorLine, in: &buffer)
-        }
-        
-        let updatedImportStatements = extractImportStatements(from: buffer)
-        
+        var bufferLines = invocation.buffer.lines
+
+        let updatedImportStatements = extractImportStatements(from: bufferLines)
         let sortedImports = updatedImportStatements.map { $0.1 }.sorted { $0.count > $1.count }
-        
-        replaceImportStatements(in: &buffer, with: sortedImports)
-        
+        replaceImportStatements(in: &bufferLines, with: sortedImports)
+
         completionHandler(nil)
     }
-    
+
     /// Extracts all the import statements and their line numbers from the buffer,
     /// removing any duplicate import statements.
     private func extractImportStatements(from buffer: NSMutableArray) -> [(Int, String)] {
@@ -94,32 +80,5 @@ class SourceEditorCommand: NSObject, XCSourceEditorCommand {
             }
         }
         return position
-    }
-    
-    /// Moves the newly added import statement to the top of the buffer, just below existing imports
-    private func moveNewImportToTop(
-        _ newImport: String,
-        at originalIndex: Int,
-        in buffer: inout NSMutableArray
-    ) {
-        // Step 1: Find all existing import statements
-        let importIndices = buffer.enumerated().compactMap { (index, line) -> Int? in
-            guard let lineString = line as? String, lineString.starts(with: "import ") else {
-                return nil
-            }
-            return index
-        }
-        
-        // Step 2: If there are existing imports, insert the new import below them
-        if !importIndices.isEmpty {
-            let lastImportIndex = importIndices.last!
-            buffer.insert(newImport, at: lastImportIndex + 1)
-        } else {
-            // If no imports are found, insert it at the top
-            buffer.insert(newImport, at: 0)
-        }
-        
-        // Step 3: Remove the duplicate line where the import statement was originally placed
-        buffer.removeObject(at: originalIndex + 1)
     }
 }
