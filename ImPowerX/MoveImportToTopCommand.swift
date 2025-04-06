@@ -8,7 +8,15 @@
 import Foundation
 import XcodeKit
 
+/// Command to move a newly added `import` statement (at the cursor) to the top of the file,
+/// just below existing import statements.
 class MoveImportToTopCommand: NSObject, XCSourceEditorCommand {
+
+    /// Entry point triggered by Xcode when the command is run.
+    ///
+    /// - Parameters:
+    ///   - invocation: The current editor context, including the text buffer and cursor position.
+    ///   - completionHandler: A closure to call after the command finishes.
     func perform(with invocation: XCSourceEditorCommandInvocation, completionHandler: @escaping (Error?) -> Void) {
         var bufferLines = invocation.buffer.lines
         guard let cursorSelection = invocation.buffer.selections.firstObject as? XCSourceTextRange else {
@@ -26,30 +34,36 @@ class MoveImportToTopCommand: NSObject, XCSourceEditorCommand {
         completionHandler(nil)
     }
 
-    /// Moves the newly added import statement to the top of the buffer, just below existing imports
-    private func moveNewImportToTop(
+    /// Moves the newly added import statement to the appropriate location in the buffer.
+    ///
+    /// - Parameters:
+    ///   - newImport: The import statement to move (e.g., `"import SwiftUI"`).
+    ///   - originalIndex: The index where the import was originally inserted.
+    ///   - buffer: The entire buffer of source code lines.
+    func moveNewImportToTop(
         _ newImport: String,
         at originalIndex: Int,
         in buffer: inout NSMutableArray
     ) {
-        // Step 1: Find all existing import statements
+        // Find all existing import lines
         let importIndices = buffer.enumerated().compactMap { (index, line) -> Int? in
             guard let lineString = line as? String, lineString.starts(with: "import ") else {
                 return nil
             }
             return index
         }
-        
-        // Step 2: If there are existing imports, insert the new import below them
+
         if !importIndices.isEmpty {
+            // Insert new import after last existing import
             let lastImportIndex = importIndices.last!
             buffer.insert(newImport, at: lastImportIndex + 1)
         } else {
-            // If no imports are found, insert it at the top
+            // If no other imports exist, place at top
             buffer.insert(newImport, at: 0)
         }
-        
-        // Step 3: Remove the duplicate line where the import statement was originally placed
-        buffer.removeObject(at: originalIndex + 1)
+
+        // Adjust removal index if insertion was before original
+        let removeIndex = originalIndex >= buffer.count ? buffer.count - 1 : originalIndex + 1
+        buffer.removeObject(at: removeIndex)
     }
 }
