@@ -1,4 +1,5 @@
-# ImPowerX
+
+# <img src="https://github.com/user-attachments/assets/85e03ff9-12e0-4f41-89d1-4cff3648eda6" width="30" alt="ImPower Icon"/> ImPowerX
 
 **ImPowerX** is an Xcode Source Editor Extension that enhances your Swift coding workflow by providing powerful import statement tools. With just a few clicks, you can:
 
