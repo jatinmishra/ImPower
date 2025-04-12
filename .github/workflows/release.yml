@@ -20,7 +20,12 @@ jobs:
 
       - name: Build the .app bundle
         run: |
-          xcodebuild -scheme ImPower -configuration Release -derivedDataPath build
+          xcodebuild -scheme ImPower \
+                     -configuration Release \
+                     -derivedDataPath build \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_ALLOWED=NO
           mkdir -p output
           cp -R build/Build/Products/Release/ImPower.app output/
 
