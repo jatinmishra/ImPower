@@ -1,0 +1,37 @@
+name: Build and Release Extension
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Build the .app bundle
+        run: |
+          xcodebuild -scheme ImPower -configuration Release -derivedDataPath build
+          mkdir -p output
+          cp -R build/Build/Products/Release/ImPower.app output/
+
+      - name: Compress .app into zip
+        run: |
+          cd output
+          zip -r ImPower.zip ImPower.app
+
+      - name: Create GitHub Release and Upload
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "ImPower v${{ github.run_number }}"
+          files: output/ImPower.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
