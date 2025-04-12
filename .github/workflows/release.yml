@@ -32,7 +32,7 @@ jobs:
       - name: Compress .app into zip
         run: |
           cd output
-          zip -r ImPower.zip ImPower.app
+          ditto -c -k --keepParent ImPower.app ImPower.zip
 
       - name: Create GitHub Release and Upload
         uses: softprops/action-gh-release@v1
