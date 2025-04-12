@@ -49,15 +49,15 @@ Sorts all imports by length (longest to shortest), and removes any duplicates.
 
 ### Step 1: Download the App
 
-Head to the [**Releases**](https://github.com/jatinmishra/ImPower/releases) section and download the latest `ImPowerX.app`.
+Head to the [**Releases**](https://github.com/jatinmishra/ImPower/releases) section and download the latest `ImPower.app`.
 
 ### Step 2: Move to Applications
 
-Move the downloaded `ImPowerX.app` to your `/Applications` folder (or any folder you prefer).
+Move the downloaded `ImPower.app` to your `/Applications` folder (or any folder you prefer).
 
 ### Step 3: Run the App Once
 
-Double-click to run `ImPowerX.app`. This is necessary to register the extension with the system.
+Double-click to run `ImPower.app`. This is necessary to register the extension with the system.
 
 ### Step 4: Enable the Extension
 
