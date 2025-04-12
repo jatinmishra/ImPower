@@ -1,4 +1,4 @@
-name: Build and Release Extension
+name: Build and Release
 
 on:
   push:
