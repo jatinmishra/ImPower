@@ -45,24 +45,6 @@ Sorts all imports by length (longest to shortest), and removes any duplicates.
 3. From the menu bar, go to: Editor > ImPowerX > Move Import to Top
 4. Or to sort all import statements: Editor > ImPowerX > Sort Imports
 
-## 🚀 Installation
-
-### Step 1: Download the App
-
-Head to the [**Releases**](https://github.com/jatinmishra/ImPower/releases) section and download the latest `ImPower.app`.
-
-### Step 2: Move to Applications
-
-Move the downloaded `ImPower.app` to your `/Applications` folder (or any folder you prefer).
-
-### Step 3: Run the App Once
-
-Double-click to run `ImPower.app`. This is necessary to register the extension with the system.
-
-### Step 4: Enable the Extension
-
-Go to: System Settings > Privacy & Security > Extensions > Xcode Source Editor > Enable **ImPowerX** in the list.
-
 ---
 
 ## 🔮 Future Improvements
